@@ -1,5 +1,4 @@
 import load_datasets as ld
-import math
 from Knn import Knn
 import BayesNaif
 
