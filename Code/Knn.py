@@ -26,9 +26,10 @@ class Knn:
         """
         self.train_list = kwargs['train']
         self.train_labels = kwargs['train_labels']
+        self.dist_equation = kwargs['dist_equation']
 
     def dist(self, e1, e2):
-        return sum(abs(x - y) for x, y in zip(e1, e2))
+        return sum(self.dist_equation(x, y) for x, y in zip(e1, e2))
 
     def predict(self, exemple, label, k=5):
         """
@@ -49,7 +50,7 @@ class Knn:
         return class_found == label, class_found
 
 
-    def train_test(self, test, test_labels):
+    def train_test(self, test, test_labels, header=""):
         """
         c'est la méthode qui va tester votre modèle sur les données de test
         l'argument test est une matrice de type Numpy et de taille nxm, avec
@@ -92,11 +93,13 @@ class Knn:
                         metriques[label]['TN'] += 1
 
         for label, m in metriques.items():
-            print("\nClasse: {}\n".format(label))
+            print("\n" + header)
+            print("Classe: {}\n".format(label))
             print("Matrice de confusion: " + str(m))
-            print("Accuracy: " + str((m['TP'] + m['TN'])/(m['TP'] + m['TN'] + m['FP'] + m['FN'])))
-            print("Precision: " + str(m['TP'] / (m['TP'] + m['FP'])))
-            print("Recall: " + str(m['TP'] / (m['TP'] + m['FN'])))
+            print("Accuracy: " + str(((m['TP'] + m['TN'])/(m['TP'] + m['TN'] + m['FP'] + m['FN']) )
+                                     if (m['TP'] + m['TN'] + m['FP'] + m['FN']) else 0))
+            print("Precision: " + str((m['TP'] / (m['TP'] + m['FP'])) if (m['TP'] + m['FP']) else 0 ))
+            print("Recall: " + str((m['TP'] / (m['TP'] + m['FN'])) if (m['TP'] + m['FN']) else 0))
             print("\n -----------------------------------")
 
 

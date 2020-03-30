@@ -7,9 +7,9 @@ class BayesNaifClassifier:
         self.case = kwargs[0]
 
     def train(self, train, train_labels):
-        if(self.case == "house-votes"):
+        if(self.case == 0):
             self.classificateur = HouseVotesCase(train, train_labels)
-        elif(self.case == "bezdelIris")   :
+        elif(self.case == 1)   :
             self.classificateur = BezdekIrisCase(train, train_labels)
         self.test(train, train_labels)
 
@@ -20,7 +20,34 @@ class BayesNaifClassifier:
         return self.classificateur.predict(exemple, label)
 
     def test(self, test, test_labels):
-        self.classificateur.test(test, test_labels)
+        metriques = {}
+        for i in set(test_labels):
+            metriques[i] = {'TP': 0, 'TN': 0, 'FP': 0, 'FN': 0}
+
+        for i in zip(test, test_labels):
+            resultat = self.predict(i[0], i[1])
+            if resultat[0]:
+                for label, m in metriques.items():
+                    if label == i[1]:
+                        metriques[label]['TP'] += 1
+                    else:
+                        metriques[label]['TN'] += 1
+            else:
+                for label, m in metriques.items():
+                    if label == i[1]:
+                        metriques[label]['FN'] += 1
+                    elif label == resultat[1]:
+                        metriques[label]['FP'] += 1
+                    else:
+                        metriques[label]['TN'] += 1
+
+        for label, m in metriques.items():
+            print("\nClasse: {}\n".format(label))
+            print("Matrice de confusion: " + str(m))
+            print("Accuracy: " + str((m['TP'] + m['TN']) / (m['TP'] + m['TN'] + m['FP'] + m['FN'])))
+            print("Precision: " + str(m['TP'] / (m['TP'] + m['FP'])))
+            print("Recall: " + str(m['TP'] / (m['TP'] + m['FN'])))
+            print("\n -----------------------------------")
 
 
 
@@ -43,8 +70,7 @@ class HouseVotesCase(Strategie):
             allignement = 0 if train_labels[x] == "republican" else 1
             for y in range(len(set)):
                 value = set[y]
-                vote = 0 if value == 'n' else 1 if value == 'y' else 2
-                self.tables[y][vote][allignement] += 1
+                self.tables[y][value][allignement] += 1
 
         self.likelyhood = [[[0 for x in range(2)] for y in range(3)] for z in range(16)]
         for x in range(len(self.tables)):
@@ -59,9 +85,8 @@ class HouseVotesCase(Strategie):
         pDemocrat = 1
         for i in range(len(exemple)):
             value = exemple[i]
-            index = 0 if value == "n" else 1 if value == "y" else 1
-            propsR = self.likelyhood[i][index][0]
-            propsD = self.likelyhood[i][index][1]
+            propsR = self.likelyhood[i][value][0]
+            propsD = self.likelyhood[i][value][1]
             pRepublican *= propsR
             pDemocrat *= propsD
 
@@ -70,29 +95,6 @@ class HouseVotesCase(Strategie):
         answer = "republican" if isRepublican > isDemocrat else "democrat"
         return answer == label, answer
 
-    def test(self, test, test_labels):
-        confusionMatrix = [[0, 0], [0, 0]]
-        for i in range(len(test)):
-            exemple = test[i]
-            label = test_labels[i]
-            success, result = self.predict(exemple, label)
-            x = 0 if result == "republican" else 1
-            y = 0 if label == "republican" else 1
-            confusionMatrix[x][y] += 1
-        republicanPrecision = confusionMatrix[0][0] / (confusionMatrix[0][0] + confusionMatrix[0][1])
-        democratPrecision = confusionMatrix[1][1] / (confusionMatrix[1][0] + confusionMatrix[1][1])
-        accuracy = (confusionMatrix[0][0] + confusionMatrix[1][1]) / (confusionMatrix[0][0] + confusionMatrix[0][1] + confusionMatrix[1][0] + confusionMatrix[1][1])
-        republicanRecall = confusionMatrix[0][0] / (confusionMatrix[1][0] + confusionMatrix[0][0])
-        democratRecall = confusionMatrix[1][1] / (confusionMatrix[0][1] + confusionMatrix[1][1])
-        print("Actual R - Actual D")
-        print("Guess R  ", confusionMatrix[0])
-        print("Guess D  ", confusionMatrix[1])
-        print("Precision for Republican: ", republicanPrecision)
-        print("Precision for Democrat: ", democratPrecision)
-        print("Accuracy: ", accuracy)
-        print("Recall for Republican: ", republicanRecall)
-        print("Recall for Democrat: ", democratRecall)
-        print()
 
 
 class BezdekIrisCase(Strategie):
@@ -131,35 +133,3 @@ class BezdekIrisCase(Strategie):
         warning = "========== {}, {}, {}".format(isSetosa, isVersicolor, isViginica) if answer != label else ""
         print(answer, label, warning)
         return answer == label, answer
-
-
-
-    def test(self, test, test_labels):
-        metriques = {}
-        for i in set(test_labels):
-            metriques[i] = {'TP': 0, 'TN': 0, 'FP': 0, 'FN': 0}
-
-        for i in zip(test, test_labels):
-            resultat = self.predict(i[0], i[1])
-            if resultat[0]:
-                for label, m in metriques.items():
-                    if label == i[1]:
-                        metriques[label]['TP'] += 1
-                    else:
-                        metriques[label]['TN'] += 1
-            else:
-                for label, m in metriques.items():
-                    if label == i[1]:
-                        metriques[label]['FN'] += 1
-                    elif label == resultat[1]:
-                        metriques[label]['FP'] += 1
-                    else:
-                        metriques[label]['TN'] += 1
-
-        for label, m in metriques.items():
-            print("\nClasse: {}\n".format(label))
-            print("Matrice de confusion: " + str(m))
-            print("Accuracy: " + str((m['TP'] + m['TN']) / (m['TP'] + m['TN'] + m['FP'] + m['FN'])))
-            print("Precision: " + str(m['TP'] / (m['TP'] + m['FP'])))
-            print("Recall: " + str(m['TP'] / (m['TP'] + m['FN'])))
-            print("\n -----------------------------------")

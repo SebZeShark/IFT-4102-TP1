@@ -90,7 +90,7 @@ def load_congressional_dataset(train_ratio):
     # Notez bien qu'on a traduit le symbole "?" pour une valeur numérique
     # Vous pouvez biensur utiliser d'autres valeurs pour ces attributs
     conversion_labels = {'republican' : 0, 'democrat' : 1, 
-                         'n' : 0, 'y' : 1, '?' : 2} 
+                         'n' : 0, '?' : 1, 'y' : 2}
     
     # Le fichier du dataset est dans le dossier datasets en attaché 
     f = open('datasets/house-votes-84.data', 'r')
@@ -100,7 +100,7 @@ def load_congressional_dataset(train_ratio):
 
     data = f.readlines()[:-1]
     random.shuffle(data)
-    values = np.array(list(map(lambda x: x[-32:-1].split(','), data)))
+    values = np.array(list(map(lambda x: list(map(lambda y: conversion_labels[y], x[-32:-1].split(','))), data)))
     labels = np.array(list(map(lambda x: x[0:-33], data)))
     cutoff = int(labels.size * train_ratio)
     train = values[:cutoff]
@@ -150,10 +150,10 @@ def load_monks_dataset(numero_dataset):
     f = open('datasets/monks-{}.test'.format(numero_dataset), 'r')
     test_data = f.readlines()[:-1]
 
-    train = np.array(list(map(lambda x: list(map(lambda y: int(y), x[1:14].split(' '))), train_data)))
-    train_labels = np.array(list(map(lambda x: x[15:-1], train_data)))
-    test = np.array(list(map(lambda x: list(map(lambda y: int(y), x[1:14].split(' '))), test_data)))
-    test_labels = np.array(list(map(lambda x: x[15:-1], test_data)))
+    train = np.array(list(map(lambda x: list(map(lambda y: int(y), x[3:14].split(' '))), train_data)))
+    train_labels = np.array(list(map(lambda x: str(x[1]), train_data)))
+    test = np.array(list(map(lambda x: list(map(lambda y: int(y), x[3:14].split(' '))), test_data)))
+    test_labels = np.array(list(map(lambda x: str(x[1]), test_data)))
 
     # La fonction doit retourner 4 matrices (ou vecteurs) de type Numpy. 
     return (train, train_labels, test, test_labels)
