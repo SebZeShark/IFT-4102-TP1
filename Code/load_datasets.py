@@ -90,7 +90,7 @@ def load_congressional_dataset(train_ratio):
     # Notez bien qu'on a traduit le symbole "?" pour une valeur numérique
     # Vous pouvez biensur utiliser d'autres valeurs pour ces attributs
     conversion_labels = {'republican' : 0, 'democrat' : 1, 
-                         'n' : 0, 'y' : 1, '?' : 2} 
+                         'n' : 0, '?' : 1, 'y' : 2}
     
     # Le fichier du dataset est dans le dossier datasets en attaché 
     f = open('datasets/house-votes-84.data', 'r')
@@ -100,7 +100,7 @@ def load_congressional_dataset(train_ratio):
 
     data = f.readlines()[:-1]
     random.shuffle(data)
-    values = np.array(list(map(lambda x: x[-32:-1].split(','), data)))
+    values = np.array(list(map(lambda x: list(map(lambda y: conversion_labels[y], x[-32:-1].split(','))), data)))
     labels = np.array(list(map(lambda x: x[0:-33], data)))
     cutoff = int(labels.size * train_ratio)
     train = values[:cutoff]
