@@ -1,4 +1,5 @@
 import load_datasets as ld
+import math
 from Knn import Knn
 import BayesNaif
 
@@ -25,11 +26,15 @@ def main():
     m3 = ld.load_monks_dataset(3)
 
     # Initializer/instanciez vos classifieurs avec leurs paramètres
-    knn_i = Knn(train=i[0], train_labels=i[1], dist_equation=lambda x, y: pow((x - y), 2))
-    knn_c = Knn(train=c[0], train_labels=c[1], dist_equation=lambda x, y: pow((x - y), 2))
-    knn_m1 = Knn(train=m1[0], train_labels=m1[1], dist_equation=lambda x, y: pow((x - y), 2))
-    knn_m2 = Knn(train=m2[0], train_labels=m2[1], dist_equation=lambda x, y: pow((x - y), 2))
-    knn_m3 = Knn(train=m3[0], train_labels=m3[1], dist_equation=lambda x, y: pow((x - y), 2))
+
+    euclide = lambda x, y: pow((x - y), 2) #Pas besoin d'extraire la racine, car cela ne changera pas l'ordre de classement
+    diff_binaire = lambda x, y: 0 if x == y else 1
+
+    knn_i = Knn(train=i[0], train_labels=i[1], dist_equation=euclide)
+    knn_c = Knn(train=c[0], train_labels=c[1], dist_equation=euclide)
+    knn_m1 = Knn(train=m1[0], train_labels=m1[1], dist_equation=diff_binaire)
+    knn_m2 = Knn(train=m2[0], train_labels=m2[1], dist_equation=diff_binaire)
+    knn_m3 = Knn(train=m3[0], train_labels=m3[1], dist_equation=diff_binaire)
 
     # Entrainez votre classifieur
     knn_i.train_test(i[0], i[1], "Dataset: Iris, Training")
