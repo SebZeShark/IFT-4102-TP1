@@ -157,3 +157,10 @@ def load_monks_dataset(numero_dataset):
 
     # La fonction doit retourner 4 matrices (ou vecteurs) de type Numpy. 
     return (train, train_labels, test, test_labels)
+
+if __name__ == "__main__":
+    train, train_labels, test, test_labels = load_congressional_dataset(0.6)
+    print(train)
+    print(train_labels)
+    print(test)
+    print(test_labels)
