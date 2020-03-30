@@ -1,9 +1,6 @@
-import numpy as np
-import sys
-import load_datasets
-import BayesNaif # importer la classe du classifieur bayesien
-import Knn # importer la classe du Knn
-#importer d'autres fichiers et classes si vous en avez développés
+import load_datasets as ld
+from Knn import Knn
+import BayesNaif
 
 
 """
@@ -17,30 +14,40 @@ En gros, vous allez :
 
 """
 
-# Initializer vos paramètres
+
+def main():
+
+    # Initializer vos paramètres
+    i = ld.load_iris_dataset(0.7)
+    c = ld.load_congressional_dataset(0.7)
+    m1 = ld.load_monks_dataset(1)
+    m2 = ld.load_monks_dataset(2)
+    m3 = ld.load_monks_dataset(3)
+
+    # Initializer/instanciez vos classifieurs avec leurs paramètres
+    knn_i = Knn(train=i[0], train_labels=i[1], dist_equation=lambda x, y: pow((x - y), 2))
+    knn_c = Knn(train=c[0], train_labels=c[1], dist_equation=lambda x, y: pow((x - y), 2))
+    knn_m1 = Knn(train=m1[0], train_labels=m1[1], dist_equation=lambda x, y: pow((x - y), 2))
+    knn_m2 = Knn(train=m2[0], train_labels=m2[1], dist_equation=lambda x, y: pow((x - y), 2))
+    knn_m3 = Knn(train=m3[0], train_labels=m3[1], dist_equation=lambda x, y: pow((x - y), 2))
+
+    # Entrainez votre classifieur
+    knn_i.train_test(i[0], i[1], "Dataset: Iris, Training")
+    knn_c.train_test(c[0], c[1], "Dataset: Congressional, Training")
+    knn_m1.train_test(m1[0], m1[1], "Dataset: MONKS-1, Training")
+    knn_m2.train_test(m2[0], m2[1], "Dataset: MONKS-2, Training")
+    knn_m3.train_test(m3[0], m3[1], "Dataset: MONKS-3, Training")
+
+    # Tester votre classifieur
+    knn_i.train_test(i[2], i[3], "Dataset: Iris, Test")
+    knn_c.train_test(c[2], c[3], "Dataset: Congressional, Test")
+    knn_m1.train_test(m1[2], m1[3], "Dataset: MONKS-1, Test")
+    knn_m2.train_test(m2[2], m2[3], "Dataset: MONKS-2, Test")
+    knn_m3.train_test(m3[2], m3[3], "Dataset: MONKS-3, Test")
 
 
-
-
-
-# Initializer/instanciez vos classifieurs avec leurs paramètres
-
-
-
-
-
-# Charger/lire les datasets
-
-
-
-
-# Entrainez votre classifieur
-
-
-
-
-
-# Tester votre classifieur
+if __name__ == "__main__":
+    main()
 
 
 

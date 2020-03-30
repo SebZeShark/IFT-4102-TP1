@@ -1,7 +1,6 @@
 import numpy
-from classifieur import Classifier
 
-class BayesNaifClassifier(Classifier):
+class BayesNaifClassifier():
 
     def __init__(self, **kwargs):
         print(kwargs)
