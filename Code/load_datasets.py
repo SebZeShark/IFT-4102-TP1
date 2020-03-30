@@ -155,12 +155,5 @@ def load_monks_dataset(numero_dataset):
     test = np.array(list(map(lambda x: list(map(lambda y: int(y), x[3:14].split(' '))), test_data)))
     test_labels = np.array(list(map(lambda x: str(x[1]), test_data)))
 
-    # La fonction doit retourner 4 matrices (ou vecteurs) de type Numpy. 
+    # La fonction doit retourner 4 matrices (ou vecteurs) de type Numpy.
     return (train, train_labels, test, test_labels)
-
-if __name__ == "__main__":
-    train, train_labels, test, test_labels = load_congressional_dataset(0.6)
-    print(train)
-    print(train_labels)
-    print(test)
-    print(test_labels)

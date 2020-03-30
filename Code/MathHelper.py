@@ -22,3 +22,11 @@ class DistributionNormal:
 
     def __str__(self):
         return "Means: {}, Std Deviation {}".format(self.moyenne, self.deviation)
+
+if __name__ == "__main__":
+    test = DistributionNormal()
+    test.moyenne = 5.023333333333334
+    test.deviation = 0.3883504756711687
+    print(test)
+    var = test.solve(4.0)
+    print(var)
