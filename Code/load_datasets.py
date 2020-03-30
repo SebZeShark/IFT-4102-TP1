@@ -150,10 +150,10 @@ def load_monks_dataset(numero_dataset):
     f = open('datasets/monks-{}.test'.format(numero_dataset), 'r')
     test_data = f.readlines()[:-1]
 
-    train = np.array(list(map(lambda x: list(map(lambda y: int(y), x[1:14].split(' '))), train_data)))
-    train_labels = np.array(list(map(lambda x: x[15:-1], train_data)))
-    test = np.array(list(map(lambda x: list(map(lambda y: int(y), x[1:14].split(' '))), test_data)))
-    test_labels = np.array(list(map(lambda x: x[15:-1], test_data)))
+    train = np.array(list(map(lambda x: list(map(lambda y: int(y), x[3:14].split(' '))), train_data)))
+    train_labels = np.array(list(map(lambda x: str(x[1]), train_data)))
+    test = np.array(list(map(lambda x: list(map(lambda y: int(y), x[3:14].split(' '))), test_data)))
+    test_labels = np.array(list(map(lambda x: str(x[1]), test_data)))
 
     # La fonction doit retourner 4 matrices (ou vecteurs) de type Numpy. 
     return (train, train_labels, test, test_labels)
