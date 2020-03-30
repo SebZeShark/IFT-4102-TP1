@@ -91,7 +91,13 @@ class Knn:
                     else:
                         metriques[label]['TN'] += 1
 
-        print(metriques)
+        for label, m in metriques.items():
+            print("\nClasse: {}\n".format(label))
+            print("Matrice de confusion: " + str(m))
+            print("Accuracy: " + str((m['TP'] + m['TN'])/(m['TP'] + m['TN'] + m['FP'] + m['FN'])))
+            print("Precision: " + str(m['TP'] / (m['TP'] + m['FP'])))
+            print("Recall: " + str(m['TP'] / (m['TP'] + m['FN'])))
+            print("\n -----------------------------------")
 
 
 
