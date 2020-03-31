@@ -23,8 +23,7 @@ def main():
 
     # Initializer/instanciez vos classifieurs avec leurs paramètres
 
-    euclide = lambda x, y: pow((x - y),
-                               2)  # Pas besoin d'extraire la racine, car cela ne changera pas l'ordre de classement
+    euclide = lambda x, y: pow((x - y), 2)  # Pas besoin d'extraire la racine, car cela ne changera pas l'ordre de classement
     diff_binaire = lambda x, y: 0 if x == y else 1
 
     knn_i = Knn(train=i[0], train_labels=i[1], dist_equation=euclide)

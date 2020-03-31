@@ -8,7 +8,6 @@ vous pouvez rajouter d'autres méthodes qui peuvent vous etre utiles, mais moi
 je vais avoir besoin de tester les méthodes test, predict et test de votre code.
 """
 
-import numpy as np
 from collections import Counter
 
 
@@ -44,11 +43,11 @@ class Knn:
         for i in range(self.train_labels.size):
             distances.append((self.dist(self.train_list[i], exemple), self.train_labels[i]))
 
-        distances.sort(key=lambda x: x[0])
+        distances.sort(key=lambda x: x[0])  # on classe les items d'entrainement selon leur distance avec l'exemple
         classes = map(lambda y: y[1], distances[:k])
         class_found = Counter(classes).most_common(1)[0][0]
+        # puis on choisit la classe de la pluralité des k plus petites distances
         return class_found == label, class_found
-
 
     def train_test(self, test, test_labels, header=""):
         """
