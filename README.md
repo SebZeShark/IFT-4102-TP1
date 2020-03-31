@@ -5,6 +5,7 @@ La classe BayesNaif contient le classificateur de type Bayésien Naïf
 La classe DistributionNormal dans MathHelper contiens la classe permetant de calculer une distribution normale 
 
 Répartition des tâches:
+
 Léo Guérin-Morneau:
 -complété le fichier load_datasets
 -complété le fichier knn
